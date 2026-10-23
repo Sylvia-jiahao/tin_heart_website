@@ -13,3 +13,22 @@ let toastTimer;function toast(message){const el=$('.download-toast');if(!el)retu
 fetch('release.json').then(response=>{if(!response.ok)throw Error();return response.json()}).then(info=>{for(const key of ['game','soundtrack']){const entry=info[key];document.querySelectorAll('[data-download="'+key+'"]').forEach(link=>{link.href=entry.url;link.download=entry.filename})}document.querySelectorAll('.game-size').forEach(el=>el.textContent=(info.game.bytes/1e6).toFixed(1)+' MB');document.querySelectorAll('.ost-size').forEach(el=>el.textContent=(info.soundtrack.bytes/1e6).toFixed(1)+' MB')}).catch(()=>toast('下载信息暂未更新，仍可直接下载。'));
 document.querySelectorAll('.download-link').forEach(link=>link.addEventListener('click',()=>toast('已请求下载，请查看浏览器下载列表。')));
 if($('.stage')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){requestAnimationFrame(()=>document.body.classList.add('play-opening'))}
+
+const trailer=$('#trailer');
+if(trailer){
+ const start=$('.trailer-start'),status=$('.trailer-status');
+ trailer.controls=false;start.hidden=false;
+ start.addEventListener('click',async()=>{
+  status.textContent='正在加载视频…';
+  if(!trailer.getAttribute('src')||trailer.error){trailer.src=trailer.dataset.src;trailer.load()}
+  trailer.controls=true;start.hidden=true;
+  try{await trailer.play();status.textContent='';trailer.focus()}catch{status.textContent='视频暂时无法播放，请重试或直接打开视频。';start.hidden=false;trailer.controls=false}
+ });
+ trailer.addEventListener('playing',()=>{status.textContent='';start.hidden=true});
+ trailer.addEventListener('waiting',()=>{status.textContent='正在加载视频…'});
+ trailer.addEventListener('error',()=>{status.textContent='视频读取失败，请重试或直接打开视频。';start.hidden=false;trailer.controls=false});
+ trailer.addEventListener('play',()=>audio?.pause());
+ audio?.addEventListener('play',()=>trailer.pause());
+ if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting&&!document.fullscreenElement)trailer.pause()},{threshold:0}).observe(trailer);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)trailer.pause()});
+}
