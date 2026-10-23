@@ -1,0 +1,1 @@
+Website-only WOFF2 subsets of NaniFont Regular and LXGW WenKai. Glyph outlines unchanged; subset families renamed TinHeart Web nani / TinHeart Web wenkai to distinguish these derivatives. Original game TTF files remain unchanged. Copyright and SIL OFL licenses preserved alongside fonts.

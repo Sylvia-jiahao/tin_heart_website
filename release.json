@@ -1,0 +1,15 @@
+{
+  "version": "3.0",
+  "game": {
+    "filename": "锡心-v3.0-安装程序.exe",
+    "bytes": 690781437,
+    "url": "https://github.com/Sylvia-jiahao/tin_heart_website/releases/download/v3.0/%E9%94%A1%E5%BF%83-v3.0-%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F.exe",
+    "sha256": "8a7fedb1b99fe9b31f91abe11a57a78960030967b6f6b1af95bc6959aa4c3b7c"
+  },
+  "soundtrack": {
+    "filename": "锡心-游戏原声带-无损FLAC.zip",
+    "bytes": 76258135,
+    "url": "https://github.com/Sylvia-jiahao/tin_heart_website/releases/download/v3.0/%E9%94%A1%E5%BF%83-%E6%B8%B8%E6%88%8F%E5%8E%9F%E5%A3%B0%E5%B8%A6-%E6%97%A0%E6%8D%9FFLAC.zip",
+    "sha256": "1c815ddb4710e2df278d04d1b268d920e0e1937f832bca6c2952131ba442b112"
+  }
+}
