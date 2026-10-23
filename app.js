@@ -16,19 +16,31 @@ if($('.stage')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){request
 
 const trailer=$('#trailer');
 if(trailer){
- const start=$('.trailer-start'),status=$('.trailer-status');
+ const start=$('.trailer-start'),status=$('.trailer-status'),expand=$('button.trailer-direct'),frame=$('.trailer-frame'),close=$('.trailer-close');
+ expand.hidden=false;
+ function prepareTrailer(){if(!trailer.getAttribute('src')||trailer.error){trailer.src=trailer.dataset.src;trailer.load()}trailer.controls=true;start.hidden=true}
  trailer.controls=false;start.hidden=false;
  start.addEventListener('click',async()=>{
   status.textContent='正在加载视频…';
-  if(!trailer.getAttribute('src')||trailer.error){trailer.src=trailer.dataset.src;trailer.load()}
-  trailer.controls=true;start.hidden=true;
-  try{await trailer.play();status.textContent='';trailer.focus()}catch{status.textContent='视频暂时无法播放，请重试或直接打开视频。';start.hidden=false;trailer.controls=false}
+  prepareTrailer();
+  try{await trailer.play();status.textContent='';trailer.focus()}catch{status.textContent='视频暂时无法播放，请重试播放。';start.hidden=false;trailer.controls=false}
  });
+ let previousOverflow='';
+ function expandInPage(){previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';frame.classList.add('is-expanded');close.focus()}
+ function collapseInPage(){if(!frame.classList.contains('is-expanded'))return;frame.classList.remove('is-expanded');document.body.style.overflow=previousOverflow;expand.focus()}
+ expand.addEventListener('click',async()=>{
+  prepareTrailer();
+  try{if(trailer.requestFullscreen){await trailer.requestFullscreen()}else if(trailer.webkitEnterFullscreen){trailer.webkitEnterFullscreen()}else{expandInPage()}}catch{expandInPage()}
+  try{await trailer.play();status.textContent=''}catch{status.textContent='视频暂时无法播放，请重试播放。'}
+ });
+ close.addEventListener('click',collapseInPage);
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')collapseInPage()});
+ document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)expand.focus()});
  trailer.addEventListener('playing',()=>{status.textContent='';start.hidden=true});
  trailer.addEventListener('waiting',()=>{status.textContent='正在加载视频…'});
- trailer.addEventListener('error',()=>{status.textContent='视频读取失败，请重试或直接打开视频。';start.hidden=false;trailer.controls=false});
+ trailer.addEventListener('error',()=>{status.textContent='视频读取失败，请重试播放。';start.hidden=false;trailer.controls=false});
  trailer.addEventListener('play',()=>audio?.pause());
  audio?.addEventListener('play',()=>trailer.pause());
- if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting&&!document.fullscreenElement)trailer.pause()},{threshold:0}).observe(trailer);
+ if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting&&!document.fullscreenElement&&!frame.classList.contains('is-expanded'))trailer.pause()},{threshold:0}).observe(trailer);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)trailer.pause()});
 }

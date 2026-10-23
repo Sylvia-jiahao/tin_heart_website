@@ -104,3 +104,13 @@ html{scroll-snap-type:y mandatory;scroll-padding-top:0}
 .trailer-direct:focus-visible{outline:3px solid #f5dbab;outline-offset:3px}
 @media(max-width:760px){.journey.trailer-section{justify-content:flex-start;padding:100px 6vw 28px}.trailer-content{width:min(88%,480px)}.journey.trailer-section .water-peek img{object-position:70% center}.trailer-start{font-size:20px}.trailer-start svg{width:32px;height:32px;padding:8px}.trailer-start span{font-size:18px;padding-bottom:4px}.trailer-status{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.trailer-start svg{transition:none}}
+
+button.trailer-direct{border:0;cursor:pointer}
+button.trailer-direct[hidden]{display:none}
+.trailer-close{display:none}
+#trailer:fullscreen{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;background:#000}
+.trailer-frame.is-expanded{position:fixed;inset:0;width:100%;height:100dvh;z-index:100;background:#000}
+.trailer-frame.is-expanded video{width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+.trailer-frame.is-expanded .trailer-close{display:block;position:absolute;top:20px;right:20px;min-height:44px;padding:8px 16px;background:#172733;color:#f5dbab;border:1px solid #f5dbab;font:18px/1.4 TinHeartWen,serif;cursor:pointer}
+.trailer-close:focus-visible{outline:3px solid #f5dbab;outline-offset:4px}
+body:has(.trailer-frame.is-expanded) .site-header{visibility:hidden}
